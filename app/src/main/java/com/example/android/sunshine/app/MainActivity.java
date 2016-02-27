@@ -8,6 +8,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -57,6 +63,14 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            String[] temp = {"one","two","three"};
+            List<String> fakeData = Arrays.asList(temp);
+            ArrayAdapter adapter = new ArrayAdapter(getActivity(),R.layout.list_item,R.id.list_item_textview,fakeData);
+            ListView weatherList = (ListView) rootView.findViewById(R.id.listview_forecast);
+            weatherList.setAdapter(adapter);
+
+            
             return rootView;
         }
     }
