@@ -1,5 +1,7 @@
 package com.example.android.sunshine.app;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -24,7 +27,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class ForecastFragment extends Fragment {
     ListView weatherList;
@@ -63,8 +65,15 @@ public class ForecastFragment extends Fragment {
 
         weatherList = (ListView) rootView.findViewById(R.id.listview_forecast);
         weatherAdapter = new ArrayAdapter(getActivity(),R.layout.list_item,R.id.list_item_textview,new ArrayList());
-
         weatherList.setAdapter(weatherAdapter);
+        weatherList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String weatherString = (String) weatherAdapter.getItem(i);
+                Intent moveToDetailIntent = new Intent(getActivity(),DetailActivity.class).putExtra("weather",weatherString);
+                startActivity(moveToDetailIntent);
+            }
+        });
 
 
         return rootView;
