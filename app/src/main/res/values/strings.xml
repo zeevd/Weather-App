@@ -61,5 +61,6 @@
         <item>1</item>
     </string-array>
     <string name="default_temperature_option">0</string>
+    <string name="title_share">Share</string>
 
 </resources>
