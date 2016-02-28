@@ -3,7 +3,7 @@
     <EditTextPreference
         android:defaultValue="@string/default_zipcode"
         android:inputType="number"
-        android:key="zipcode"
+        android:key="@string/key_zipcode"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
@@ -13,10 +13,10 @@
          dismiss it. -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
     <ListPreference
-        android:defaultValue="0"
+        android:defaultValue="@string/default_temperature_option"
         android:entries="@array/temperature_scale_titles"
         android:entryValues="@array/temperature_scale_options"
-        android:key="temp_scale"
+        android:key="@string/key_temperature"
         android:title="@string/temperature_scale" />
 
 </PreferenceScreen>

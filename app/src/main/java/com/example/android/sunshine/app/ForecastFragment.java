@@ -1,10 +1,11 @@
 package com.example.android.sunshine.app;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,8 +41,14 @@ public class ForecastFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        getWeather();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.forecast,menu);
+        inflater.inflate(R.menu.forecast, menu);
     }
 
     @Override
@@ -49,10 +56,16 @@ public class ForecastFragment extends Fragment {
         int id = item.getItemId();
         switch (id){
             case R.id.action_refresh:
-                new FetchWeatherTask().execute("11763");
+                getWeather();
             default:
                 return false;
         }
+    }
+
+    private void getWeather(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String zipcode = preferences.getString(getString(R.string.key_zipcode),getString(R.string.default_zipcode));
+        new FetchWeatherTask().execute(zipcode);
     }
 
     public ForecastFragment() {}
@@ -85,6 +98,9 @@ public class ForecastFragment extends Fragment {
         final String DAY_COUNT = "7";
         final String UNITS = "metric";
 
+        private String celsiusToFahrenheit(String tempInCelsius){
+            return String.valueOf(Float.parseFloat(tempInCelsius) * (9/5) + 32);
+        }
 
         @Override
         protected void onPostExecute(String[] s) {
@@ -118,14 +134,18 @@ public class ForecastFragment extends Fragment {
                     json.append((char) temp);
                 }
 
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String t = preferences.getString(getString(R.string.key_temperature),getString(R.string.default_temperature_option));
+                boolean isCelsius = t.equals("0") ? true : false;
+
                 JSONObject jsonObj = new JSONObject(json.toString());
                 JSONArray days = jsonObj.getJSONArray("list");
 
                 for (int i=0; i<7; i++) {
                     JSONObject day = days.getJSONObject(i);
                     JSONObject temperature = day.getJSONObject("temp");
-                    String minTemp = temperature.getString("min");
-                    String maxTemp = temperature.getString("max");
+                    String minTemp = isCelsius ? temperature.getString("min") : celsiusToFahrenheit(temperature.getString("min"));
+                    String maxTemp = isCelsius ? temperature.getString("max") : celsiusToFahrenheit(temperature.getString("max"));
                     String main = day.getJSONArray("weather").getJSONObject(0).getString("main");
                     String description = minTemp + " " + maxTemp + " " + main;
                     daysInfo[i] = description;
