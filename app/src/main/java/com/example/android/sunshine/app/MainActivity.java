@@ -1,10 +1,14 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -41,7 +45,17 @@ public class MainActivity extends ActionBarActivity {
             startActivity(new Intent(this,SettingsActivity.class));
             return true;
         }
-
+        else if (id == R.id.view_loc_on_map) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String zipcode = preferences.getString(getString(R.string.key_zipcode), getString(R.string.default_zipcode));
+            Uri zipUri = Uri.parse("geo:0,0?q=" + zipcode);
+            Intent showZipOnMap = new Intent(Intent.ACTION_VIEW, zipUri);
+            if (showZipOnMap.resolveActivity(getPackageManager()) != null)
+                startActivity(showZipOnMap);
+            else
+                Toast.makeText(MainActivity.this, "Could not locate maps application on device", Toast.LENGTH_SHORT).show();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

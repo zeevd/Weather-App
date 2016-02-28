@@ -26,7 +26,7 @@ public class DetailFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_detail,menu);
+        inflater.inflate(R.menu.menu_detail_fragment,menu);
     }
 
     @Override

@@ -57,6 +57,7 @@ public class ForecastFragment extends Fragment {
         switch (id){
             case R.id.action_refresh:
                 getWeather();
+
             default:
                 return false;
         }
@@ -135,7 +136,7 @@ public class ForecastFragment extends Fragment {
                 }
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String t = preferences.getString(getString(R.string.key_temperature),getString(R.string.default_temperature_option));
+                String t = preferences.getString(getString(R.string.key_temperature), getString(R.string.default_temperature_option));
                 boolean isCelsius = t.equals("0") ? true : false;
 
                 JSONObject jsonObj = new JSONObject(json.toString());
